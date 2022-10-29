@@ -4,7 +4,7 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="File_Opener.exe"/>
-    <OBJFILES value="File_Opener.obj"/>
+    <OBJFILES value="Source.obj"/>
     <RESFILES value="File_Opener.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -30,15 +30,16 @@
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL;_RTLDLL;USEPACKAGES"/>
     <MAINSOURCE value="File_Opener.bpf"/>
-    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="&quot;C:\Documents and Settings\HomeComp\Мои документы\Билдер\Ккрсак&quot;;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="&quot;C:\Documents and Settings\HomeComp\Мои документы\Билдер\Ккрсак&quot;;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-src_suffix cpp -D_DEBUG -I$(BCB)\include -I$(BCB)\include\vcl -boa"/>
-    <CFLAG1 value="-tWC -tWM -Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v 
-      -vi- -c"/>
+    <IDLCFLAGS value="-I&quot;C:\Documents and Settings\HomeComp\Мои документы\Билдер\Ккрсак&quot; 
+      -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -D_DEBUG -boa"/>
+    <CFLAG1 value="-tWC -tWM- -Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c"/>
     <PFLAGS value="-$YD -$W -$O- -$A8 -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
@@ -48,13 +49,13 @@
   <LINKER>
     <ALLOBJ value="c0x32.obj $(PACKAGES) $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
-    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mti.lib"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32i.lib"/>
     <OTHERFILES value=""/>
   </LINKER>
   <FILELIST>
       <FILE FILENAME="File_Opener.res" FORMNAME="" UNITNAME="File_Opener.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="File_Opener.bpf" FORMNAME="" UNITNAME="File_Opener" CONTAINERID="BPF" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="File_Opener.cpp" FORMNAME="" UNITNAME="File_Opener" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Source.cpp" FORMNAME="" UNITNAME="Source" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

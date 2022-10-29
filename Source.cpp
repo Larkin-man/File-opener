@@ -2,13 +2,10 @@
 //*****"ТЕХНОЛОГИЯ ПРОГРАММИРОВАНИЯ"*****//
 //********Апонасенко А.В. КИ08-04********//
 
-#include <iostream>
 #include<conio.h>
 #include<stdio.h>
 #include<math.h>
 #include<string.h>
-
-using namespace std; 
 
 struct Node     //Двусвязный список
 {
@@ -20,8 +17,8 @@ struct Node     //Двусвязный список
    Node *pPrev;
 };
 
-Node *Record = NULL; //Новый список
-int nRecord = 0;     //Количество списков
+Node *Record;       //Новый список
+int nRecord;     //Количество списков
 
 Node *CreateItem (int id, const char *name, float mark);
 Node *InsertAfter (Node *parent, Node *Item);
@@ -46,7 +43,7 @@ bool saveReport();
 
 void main()   //int _tmain(int argc, _TCHAR* argv[])
 {
-	int nMenu = 0;                   
+	int nMenu = 0;
 
 	while ((nMenu = showMenu()) != 0)
 	{
@@ -67,35 +64,35 @@ void main()   //int _tmain(int argc, _TCHAR* argv[])
 		case 5:
 			if (saveAsBinary())
 			{
-				cout << "File saved.";
+				printf ( "File saved.");
 			}
 			break;
 		case 7:
 			if (saveAsText())
 			{
-				cout << "File saved.";
+				printf ( "File saved.");
 			}
 			break;
 		case 6:
 			if (loadFromBinary())
 			{
-				cout << "File loaded.";
+				printf ( "File loaded.");
 			}
 			break;
 		case 8:
 			if (loadFromText())
 			{
-				cout << "File loaded.";
+				printf ( "File loaded.");
 			}
 			break;
 		case 9:
 			if (saveReport())
 			{
-				cout << "Report saved.";
+				printf ( "Report saved.");
 			}
 			break;
 		default:
-			cout << "Wrong menu item!" <<endl;
+			printf ( "Wrong menu item! \n");
 		}
 	}
 
@@ -193,28 +190,29 @@ Node *RemoveNode (Node *prev, Node *Item)
 
 int showMenu()    //Функция показывает меню
 {
-	cout << "\n1. Add"	<< endl;
-	cout << "2. Delete"	<< endl;
-	cout << "3. Modify"	<< endl;
-	cout << "4. Print"	<< endl;
-	cout << "5. Save into Binary"	<< endl;
-	cout << "6. Load from Binary"	<< endl;
-	cout << "7. Save to Text"		<< endl;
-	cout << "8. Load from Text"		<< endl;
-        cout << "9. Save Report"		<< endl;
-	//cout << "---------"	<< endl;
-	cout << "0. Exit"	<< endl;
-	cout << "\n?>";
+	printf ( "\n1. Add	\n");
+	printf ( "2. Delete  \n");
+	printf ( "3. Modify	\n");
+	printf ( "4. Print	\n");
+	printf ( "5. Save into Binary	\n");
+	printf ( "6. Load from Binary	\n");
+	printf ( "7. Save to Text		\n");
+	printf ( "8. Load from Text		\n");
+        printf ( "9. Save Report		\n");
+	//printf ( "---------	\n");
+	printf ( "0. Exit	\n");
+	printf ( "\n?>");
 
 	int choise = 0;
-	cin >> choise;
+	//cin >> choise;
+     scanf ("%d",&choise);
 
 	return choise;
 }
 
 void addItem()     //Функция добавляет элемент в список
 {
-   cout << "Please type a new value: ";
+   printf ( "Please type a new value: ");
    char name[80];
    int num1;
    int num2;
@@ -254,16 +252,17 @@ int getIndex()    //Функция возвращает индекс элемента
 {
 	if (Record == NULL)
 	{
-		cout << "Record is empty" << endl;
+		printf ( "Record is empty \n");
 		return -1;
 	}
 	int nIdx = -1;
-	cout << "Please enter an item's index to delete from array (1.." << nRecord << "):";
-	cin >> nIdx;
+	printf ( "Please enter an item's index to delete from array 1.. %d ",nRecord);
+	//cin >> nIdx;
+     scanf("%d",&nIdx);
 
 	if (nIdx < 1 || nIdx > nRecord)
 	{
-		cout << "Error: index is out of bound.";
+		printf ( "Error: index is out of bound.");
 		return -1;
 	}
 
@@ -278,8 +277,9 @@ void modifyItem()    //Функция изменяет элемент
    return;
    }
 
-   cout << "You are going to replace value " << Record->name << " at position " << nIdx + 1 << "." << endl;
-   cout << "Please type a new value: ";
+   //printf ( "You are going to replace value " << Record->name << " at position " << nIdx + 1 << "." \n");
+   printf ( "You are going to replace value %d at position %d \n",Record->name,nIdx + 1);
+   printf ( "Please type a new value: ");
    Node *Item = Record;
    for (int i=0;i<nIdx;i++)
       {
@@ -291,15 +291,15 @@ void modifyItem()    //Функция изменяет элемент
                        &Item->num3);
 }
 
-bool saveAsBinary()    //Функция сохраняет список в бинарный файл
+k,bool saveAsBinary()    //Функция сохраняет список в бинарный файл
 {
    FILE *fp = fopen ("lab14.bin", "w");
 
 	if (!fp)
-	{
-		cout << "Cannot create binary file";
+	m;jjj{
+		printf ( "Cannot create binary file");
 		return false;
-	}  
+	}
 	fwrite(&nRecord, sizeof(int), 1, fp);
         for (int i = 0; i < nRecord; ++i)
 	{
@@ -324,7 +324,7 @@ bool loadFromBinary()    //Функция загружает список из бинарного файла
 
 	if (!fp)
 	{
-		cout << "Cannot open binary file";
+		printf ( "Cannot open binary file");
 		return false;
 	}
 
@@ -363,7 +363,7 @@ bool saveAsText()   //Функция сохраняет список в текстовый файл
 
 	if (!fp)
 	{
-		cout << "Cannot create text file";
+		printf ( "Cannot create text file");
 		return false;
 	}
         //Node *Item = Record;
@@ -372,7 +372,7 @@ bool saveAsText()   //Функция сохраняет список в текстовый файл
 	for (int i = 0; i < nRecord; ++i)
 	{
                 fprintf(fp, "%s ", Record->name);
-		fprintf(fp, "%d ", Record->num1);
+                fprintf(fp, "%d ", Record->num1);
                 fprintf(fp, "%d ", Record->num2);
                 fprintf(fp, "%d ", Record->num3);
               //fprintf(fp, "%p ", Record->pNext);
@@ -390,7 +390,7 @@ bool loadFromText()     //Функция загружает список из текстового файла
 
 	if (!fp)
 	{
-		cout << "Cannot open text file";
+		printf ( "Cannot open text file");
 		return false;
 	}
 
@@ -447,5 +447,3 @@ bool saveReport()   //Функция сохраняет отсчет
         return true;
 
 }
-
-

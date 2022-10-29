@@ -1,398 +1,451 @@
-// Source.cpp : Defines the entry point for the console application.
-//
+//*****КУРСОВАЯ РАБОТА ПО ДИСЦИПЛИНЕ*****//
+//*****"ТЕХНОЛОГИЯ ПРОГРАММИРОВАНИЯ"*****//
+//********Апонасенко А.В. КИ08-04********//
 
-#include "stdafx.h"
-#include <conio.h>
-#include <string.h>
-#include <locale.h>
+#include <iostream>
+#include<conio.h>
+#include<stdio.h>
+#include<math.h>
+#include<string.h>
 
-// Объявление глобальных переменных
+using namespace std; 
 
-class KOR
-{public:
-
-	
-
-	char Name[50];
-	char Nazv[10];
-	int kol;
-	float cena;
-	KOR *next;
-
-
-	void AddItem();
-	void LoadTxtFile();
-	void SaveTxtFile();
-	void removeAt();
-	void DeleteList(KOR*);
-	int GetIndex();
-	void SortList();
-	void EditItem();
-	KOR* CreateItem(const char* Name, const char* Nazv, int kol, float cena);
-	KOR* GetTail(KOR*);
-	KOR* push_back(KOR*, KOR*);
-	
-	
-};
-KOR *head=NULL;
-int numrec=0;
-
-// Объявление функций
-int ShowMenu();
-void PrintKor(KOR*, int);
-
-// Главная функция
-int _tmain(int argc, _TCHAR* argv[])
+struct Node     //Двусвязный список
 {
-	int nMenu,i;
-	KOR *st;
-	KOR a;
+   char name[80];
+   int  num1;
+   int  num2;
+   int  num3;
+   Node *pNext;
+   Node *pPrev;
+};
 
-	setlocale(LC_CTYPE,"Russian");
-	do
+Node *Record = NULL; //Новый список
+int nRecord = 0;     //Количество списков
+
+Node *CreateItem (int id, const char *name, float mark);
+Node *InsertAfter (Node *parent, Node *Item);
+Node *getTail (Node *head);
+Node *PushBack (Node *head, Node *Item); 
+void PrintNode (Node *Item);
+void PrintList (Node *head);
+void DeleteList (Node *Item);
+Node *RemoveNode (Node *prev, Node *Item);
+
+int showMenu();
+void addItem();
+void deleteItem();
+void modifyItem();
+
+bool saveAsBinary();
+bool loadFromBinary();
+bool saveAsText();
+bool loadFromText(); 
+int getIndex();
+bool saveReport();
+
+void main()   //int _tmain(int argc, _TCHAR* argv[])
+{
+	int nMenu = 0;                   
+
+	while ((nMenu = showMenu()) != 0)
 	{
-		nMenu=ShowMenu();
-		switch(nMenu)
+		switch (nMenu)
 		{
 		case 1:
-			  {
-				  a.AddItem();
-				  break;
-			  }
+			addItem();
+			break;
 		case 2:
-			  {
-				  a.EditItem();
-				  break;
-			  }
+			deleteItem();
+			break;
 		case 3:
-			  {
-				  a.removeAt();
-				  break;
-			  }
+			modifyItem();
+			break;
 		case 4:
-			  {if(!head)
-				  {
-					  printf("\nБаза данных пуста...\n");
-					  break;
-				  }
-				  a.SortList();
-				  
-				  printf("\n");
-				  printf("+----+--------------+--------------------+----------------+--------+\n");
-				  printf("| №  |    Автор     |      Название      | Кол-во страниц |  Цена  |\n");
-	              printf("+----+--------------+--------------------+----------------+--------+\n");
-				  st = head;
-				  i=1;
-				  while(st)
-				  {
-					  PrintKor(st,i++);
-					  st=st->next;
-				  }
-				  printf("+----+--------------+--------------------+----------------+--------+\n");
-				  break;
-			  }
+			PrintList (Record);
+			break;
 		case 5:
-			  {
-				  if(head)
-				  {
-					  a.DeleteList(head);
-					  head=NULL;
-					  numrec=0;
-				  }
-				  a.LoadTxtFile();
-				  break;
-			  }
-		case 6:
-			  {
-				  a.SaveTxtFile();
-				  break;
-			  }
+			if (saveAsBinary())
+			{
+				cout << "File saved.";
+			}
+			break;
 		case 7:
-			  {
-				  if(!head)
-				  {
-					  printf("\nБаза данных и так пуста!\n"); 
-					  break;
-				  }
-				  a.DeleteList(head);
-				  head=NULL;
-				  numrec=0;
-				  break;
-			  }
-		default: printf("\nНеправильный пункт меню...\n");
+			if (saveAsText())
+			{
+				cout << "File saved.";
+			}
+			break;
+		case 6:
+			if (loadFromBinary())
+			{
+				cout << "File loaded.";
+			}
+			break;
+		case 8:
+			if (loadFromText())
+			{
+				cout << "File loaded.";
+			}
+			break;
+		case 9:
+			if (saveReport())
+			{
+				cout << "Report saved.";
+			}
+			break;
+		default:
+			cout << "Wrong menu item!" <<endl;
 		}
-	}while(nMenu!=0);
-	return 0;
-}
-
-// Функция вывода меню на экран
-int ShowMenu()
-{
-	int choice;
-
-	printf("\n====================================================================\n");
-	printf("1 - Добавить запись\n");
-	printf("2 - Изменить запись\n");
-	printf("3 - Удалить  запись\n");
-	printf("4 - Показать весь список\n");
-	printf("5 - Загрузить текстовый файл\n");
-	printf("6 - Сохранить текстовый файл\n");
-	printf("7 - Удалить список\n");
-	printf("0 - Выход\n");
-	printf("Количество записей в базе: %d\n",numrec);
-	printf("Ваш выбор: ");
-	scanf("%d",&choice);
-	return choice;
-}
-
-// Функция ввода данных о студенте
-void KOR :: AddItem()
-{
-	char Name[50];
-	char Nomer[10];
-	int mest;
-	float cena;
-	KOR *st, *tail,a;
-
-	flushall();			
-	printf("Автор          : ");
-	gets(Name); 
-	printf("Название       : ");
-	gets(Nazv);
-	printf("Кол-во страниц : ");
-	scanf("%d",&kol);
-	printf("Цена           : ");
-	scanf("%f",&cena);
-
-	tail = GetTail(head);
-	st=a.push_back(tail, a.CreateItem(Name, Nazv, kol, cena));
-	if (!head)
-		head = st;
-	++numrec;
-}
-
-// Функция изменения записи
-void KOR :: EditItem()
-{
-	int index;
-	KOR *st,a;
-
-	index=a.GetIndex();
-	if(index==-1)
-		return;
-	st=head;
-	for(int i=1;i<index;++i)
-		st=st->next;
-	printf("Сейчас эта запись содержит следующие данные:\n");
-	printf("\n");
-	printf("+----+--------------+--------------------+----------------+--------+\n");
-	printf("| №  |    Автор     |      Название      | Кол-во страниц |  Цена  |\n");
-	printf("+----+--------------+--------------------+----------------+--------+\n");
-	PrintKor(st, index);
-	printf("+----+--------------+--------------------+----------------+--------+\n");
-	printf("\nВведите новые данные:\n");
-	flushall();
-	printf("Автор : ");
-	gets(st->Name); 
-	printf("Название : ");
-	gets(st->Nazv);
-	printf("Кол-во страниц: ");
-	scanf("%d",&st->kol);
-	printf("Цена: ");
-	scanf("%f",&st->cena);
-	printf("\nДанные изменены.\n");
-}
-
-// Функция удаления записи
-void KOR :: removeAt()
-{
-	int index;
-	KOR *st,a;
-
-	index=a.GetIndex();
-	if(index==-1)
-		return;
-	if(index==1)
-	{
-		head=head->next;
-		--numrec;
-		return;
 	}
-	st=head;
-	for(int i=1;i<index-1;++i)
-		st=st->next;
-	st->next=st->next->next;
-	--numrec;
-}
 
-// НОВАЯ Функция создает новый элемент (пока вне списка)
-KOR* KOR :: CreateItem(const char* Name, const char* Nazv, int kol, float cena)
-{
-	KOR *st = new KOR;
-	strcpy(st->Name, Name);
-	strcpy(st->Nazv, Nazv);
-	st->kol=kol;
-	st->cena=cena;
-	st->next=NULL;
-	return st;
-}
-
-// НОВАЯ Функция находит последний элемент списка
-KOR* KOR :: GetTail(KOR* st)
-{
-	while(st && st->next)
-		st=st->next;
-	return st;
-}
-
-// Функция добавляет созданный элемент в конец списка
-KOR* KOR :: push_back(KOR *parent, KOR *st)
-{
-	if (parent) 
+	if (Record != NULL)
 	{
-		st->next = parent->next;
-		parent->next = st;
+		delete [] Record;
 	}
-	return st;
+        
+	//getch(); //return 0;
 }
 
-// Функция печатает указанный элемент списка
-void PrintKor(KOR *st, int i)
+Node *CreateItem (const char *name, int  num1, int  num2 ,int  num3)
+{                //Функция создает новый элемент
+   Node *pItem = new Node;
+   strncpy(pItem->name,name,80);
+   pItem->num1=num1;
+   pItem->num2=num2;
+   pItem->num3=num3;
+   pItem->pNext=NULL;
+   pItem->pPrev=NULL;
+   return pItem;
+}
+
+Node *InsertAfter (Node *parent, Node *Item)
+{                 //Функция связывает два элемента
+   if (parent != NULL)
+   {
+      //Item->pNext=parent->pNext;
+      parent->pNext=Item;
+      Item->pPrev=parent;
+   }
+   return Item;
+}
+
+Node *getTail (Node *head)
+{             //Функция поиска последного элемента ы списке
+   if(head == NULL)
+      return NULL;
+   Node *Item=head;
+   while(Item->pNext != NULL)
+      Item = Item->pNext;
+   return Item;
+}
+
+Node *PushBack (Node *head, Node *Item)
+{              //Функция вставляет элемент в конец списка
+   Node *tail = getTail(head);
+   return InsertAfter (tail, Item);
+}
+
+void PrintNode (Node *Item)
+{              //Функция печатает один элемент на экране
+   printf("%s ",Item->name);
+   printf("%d ",Item->num1);
+   printf("%d ",Item->num2);
+   printf("%d \n",Item->num3);
+}
+
+void PrintList (Node *head)
+{              //Функция печатает весь список на экране
+   Node *Item = head;
+   printf("Record:\n");
+   while(Item != NULL)
+   {
+      PrintNode(Item);
+      Item = Item->pNext;
+   }
+}                              
+
+void DeleteList (Node *Item)
+{               //Функция удаляет список
+   if (Item->pNext != NULL)
+   {
+      DeleteList (Item->pNext);
+   }
+   delete Item;
+}
+
+Node *RemoveNode (Node *prev, Node *Item)
+{                //Функция удаляет элементы списка расположеные перед Item
+   if (prev == Item)
+   {
+      return Item;
+   }
+   while (prev != NULL && prev->pNext != Item)
+   {
+      prev = prev->pNext;
+   }
+   if (prev != NULL)
+   {
+      prev->pNext=Item->pNext;
+   }
+   return Item;
+}
+
+int showMenu()    //Функция показывает меню
 {
-	printf("| %-2d | %-12s | %-18s | %-14d | %-6.1f |\n",i,st->Name,st->Nazv,st->kol,st->cena);
+	cout << "\n1. Add"	<< endl;
+	cout << "2. Delete"	<< endl;
+	cout << "3. Modify"	<< endl;
+	cout << "4. Print"	<< endl;
+	cout << "5. Save into Binary"	<< endl;
+	cout << "6. Load from Binary"	<< endl;
+	cout << "7. Save to Text"		<< endl;
+	cout << "8. Load from Text"		<< endl;
+        cout << "9. Save Report"		<< endl;
+	//cout << "---------"	<< endl;
+	cout << "0. Exit"	<< endl;
+	cout << "\n?>";
+
+	int choise = 0;
+	cin >> choise;
+
+	return choise;
 }
 
-// Функция чтения БД из текстового файла
-void KOR :: LoadTxtFile()
+void addItem()     //Функция добавляет элемент в список
+{
+   cout << "Please type a new value: ";
+   char name[80];
+   int num1;
+   int num2;
+   int num3;
+   nRecord++;
+   scanf("%s %d %d %d",&name,&num1,&num2,&num3);
+   Node *Item = PushBack(Record,CreateItem(name,num1,num2,num3));
+   if(Record == NULL)
+      Record=Item;
+
+}
+
+void deleteItem()    //Функция удаляет выбраный элемент
+{
+   Node *Item = Record;
+   int nIdx = getIndex();
+   for (int i=0;i<nIdx;i++)
+      {
+      Item=Item->pNext;
+      }
+   
+   if (Item->pNext == NULL)
+       Item->pPrev->pNext=NULL;
+   else
+   if (Item->pPrev == NULL)
+       {
+       Record=Record->pNext;
+       Item->pNext->pPrev=NULL;
+       }
+   else
+   InsertAfter(Item->pPrev,Item->pNext);
+   nRecord--;
+
+}
+
+int getIndex()    //Функция возвращает индекс элемента
+{
+	if (Record == NULL)
+	{
+		cout << "Record is empty" << endl;
+		return -1;
+	}
+	int nIdx = -1;
+	cout << "Please enter an item's index to delete from array (1.." << nRecord << "):";
+	cin >> nIdx;
+
+	if (nIdx < 1 || nIdx > nRecord)
+	{
+		cout << "Error: index is out of bound.";
+		return -1;
+	}
+
+	return nIdx - 1;
+
+}
+void modifyItem()    //Функция изменяет элемент
+{
+   int nIdx = getIndex();
+   if (nIdx == -1)
+   {
+   return;
+   }
+
+   cout << "You are going to replace value " << Record->name << " at position " << nIdx + 1 << "." << endl;
+   cout << "Please type a new value: ";
+   Node *Item = Record;
+   for (int i=0;i<nIdx;i++)
+      {
+      Item=Item->pNext;
+      }
+   scanf("%s %d %d %d",&Item->name,
+                       &Item->num1,
+                       &Item->num2,
+                       &Item->num3);
+}
+
+bool saveAsBinary()    //Функция сохраняет список в бинарный файл
+{
+   FILE *fp = fopen ("lab14.bin", "w");
+
+	if (!fp)
+	{
+		cout << "Cannot create binary file";
+		return false;
+	}  
+	fwrite(&nRecord, sizeof(int), 1, fp);
+        for (int i = 0; i < nRecord; ++i)
+	{
+           int len = strlen(Record->name);
+           fwrite(&len, sizeof(int), 1, fp);
+           fwrite(Record->name, 1, len, fp);  
+           fwrite(&Record->num1, sizeof(int), 1, fp);
+           fwrite(&Record->num2, sizeof(int), 1, fp);
+           fwrite(&Record->num3, sizeof(int), 1, fp);
+         //fwrite(&Record->pNext, sizeof(*Node), 1, fp);  Указатели сохранять не нужно
+         //fwrite(&Record->pPrev, sizeof(*Node), 1, fp);  Имхо проще создать новые
+           Record=Record->pNext;
+	}
+
+	fclose(fp);
+	return true;
+}
+
+bool loadFromBinary()    //Функция загружает список из бинарного файла
+{
+   FILE *fp = fopen ("lab14.bin", "r");
+
+	if (!fp)
+	{
+		cout << "Cannot open binary file";
+		return false;
+	}
+
+	if (Record)
+	{
+		delete [] Record;
+		Record = NULL;
+	}
+
+	fread(&nRecord, sizeof(int), 1, fp);
+	for (int i = 0; i < nRecord; ++i)
+	{
+           char name[80];
+           int num1;
+           int num2;
+           int num3; 
+           int len = 0;
+           fread(&len, sizeof(int), 1, fp);
+           fread(name, sizeof(char), len, fp);
+           name[len]='\0'; 
+           fread(&num1, sizeof(int), 1, fp);
+           fread(&num2, sizeof(int), 1, fp);
+           fread(&num3, sizeof(int), 1, fp);
+           //fread(&Record,sizeof(Record), 1, fp);
+           Node *Item = PushBack(Record,CreateItem(name,num1,num2,num3));
+           if(Record == NULL)
+           Record=Item;  
+	}
+
+	fclose(fp);
+	return true;
+ }
+bool saveAsText()   //Функция сохраняет список в текстовый файл
+{                                     
+   FILE *fp = fopen ("lab14.txt", "w");
+
+	if (!fp)
+	{
+		cout << "Cannot create text file";
+		return false;
+	}
+        //Node *Item = Record;
+
+	fprintf(fp, "%d ", nRecord);
+	for (int i = 0; i < nRecord; ++i)
+	{
+                fprintf(fp, "%s ", Record->name);
+		fprintf(fp, "%d ", Record->num1);
+                fprintf(fp, "%d ", Record->num2);
+                fprintf(fp, "%d ", Record->num3);
+              //fprintf(fp, "%p ", Record->pNext);
+              //fprintf(fp, "%p ", Record->pPrev);
+                Record=Record->pNext;
+	} //while (Record->pNext != NULL);
+	fclose(fp);
+
+	return true;
+}
+
+bool loadFromText()     //Функция загружает список из текстового файла
+{
+   FILE *fp = fopen ("lab14.txt", "r");
+
+	if (!fp)
+	{
+		cout << "Cannot open text file";
+		return false;
+	}
+
+	if (Record)
+	{
+		delete [] Record;
+		Record = NULL;
+	}
+
+	fscanf(fp, "%d", &nRecord);
+
+                                            
+	for (int i = 0; i < nRecord; ++i)
+	{
+           char name[80];
+           int num1;
+           int num2;
+           int num3;
+           fscanf(fp, "%s", &name);
+           fscanf(fp, "%d", &num1);
+           fscanf(fp, "%d", &num2);
+           fscanf(fp, "%d", &num3);
+         //fscanf(fp, "%d", &pNext);
+         //fscanf(fp, "%d", &pPrev);
+           Node *Item = PushBack(Record,CreateItem(name,num1,num2,num3));
+           if(Record == NULL)
+              Record=Item;
+              //Record=Record->pNext;
+	}  
+	fclose(fp);
+	return true;
+ }
+
+bool saveReport()   //Функция сохраняет отсчет
 {
 	FILE *fp;
-	char Name[50];
-	char Nazv[10];
-	int kol;
-	float cena;
-	KOR *st, *tail,a;
-
-	fp=fopen("db.txt","r");
+	fp=fopen("report.txt","w");
 	if(fp==NULL)
 	{
 		printf("\nОшибка открытия файла...\n");
-		return;
+		return false;
 	}
-	// здесь надо удалить список, если он существует
-	fscanf(fp,"%d\n",&numrec);
-	for(int i=0;i<numrec;++i)
+	fprintf(fp, "This is a report example for %d items\n", nRecord);
+	fprintf(fp,"+----+--------------+--------------------------+---------------------------+-----------------------------------+\n");
+	fprintf(fp,"| №  | Наименование | Минимальный рост в холке | Максимальный рост в холке |  Средняя продолжительность жизни  |\n");
+	fprintf(fp,"+----+--------------+--------------------------+---------------------------+-----------------------------------+\n");
+	for(int i=0;i<nRecord;++i)
 	{
-		fgets(Name,50,fp);
-		Name[strlen(Name)-1]='\0';
-		fgets(Nazv,10,fp);
-		Nazv[strlen(Nazv)-1]='\0';
-		fscanf(fp,"%d\n",&kol);
-		fscanf(fp,"%f\n",&cena);
-		tail = a.GetTail(head);
-		st=a.push_back(tail, a.CreateItem(Name, Nazv, kol, cena));
-		if (!head)
-			head = st;
+		fprintf(fp,"| %-3d | %-20s | %-20d | %-20d | %-20d |\n",i+1,Record->name,Record->num1,Record->num2,Record->num3);
+                Record=Record->pNext;
 	}
-	printf("\nФайл прочитан.\n");
+	fprintf(fp,"+----+--------------+--------------------------+---------------------------+-----------------------------------+\n");
 	fclose(fp);
+        return true;
+
 }
 
-// Функция сохранения БД в текстовый файл
-void KOR :: SaveTxtFile()
-{
-	FILE *fp;
-	KOR *st;
-
-	if(!head)
-	{
-		printf("\nБаза данных пуста...\n");
-		return;
-	}
-	fp=fopen("db.txt","w");
-	if(fp==NULL)
-	{
-		printf("\nОшибка открытия файла...\n");
-		return;
-	}
-	fprintf(fp,"%d\n",numrec);
-	st=head;
-	while(st)
-	{
-		fprintf(fp,"%s\n",st->Name);
-		fprintf(fp,"%s\n",st->Nazv);
-		fprintf(fp,"%d\n",st->kol);
-		fprintf(fp,"%f\n",st->cena);
-		st=st->next;
-	}
-	printf("\nФайл сохранен.\n");
-	fclose(fp);
-}
-
-// НОВАЯ Функция удаляет весь список
-void KOR :: DeleteList(KOR *head)
-{
-	KOR *st,a;
-	st=head;
-	if (st->next)				//Пока есть еще элементы
-		a.DeleteList(st->next);	//удалить их
-	delete st;					//удалить текущий элемент
-}
-
-// Функция запроса номера записи
-int KOR :: GetIndex()
-{
-	int index;
-
-	if(!head)
-	{
-		printf("\nБаза данных пуста...\n");
-		return -1;
-	}
-	printf("\nВведите номер записи (1..%d): ",numrec);
-	scanf("%d",&index);
-	if(index<1 || index>numrec)
-	{
-		printf("\nНет записи с таким номером...\n");
-		return -1;
-	}
-	return index;
-}
-void KOR :: SortList()
-{
-	KOR *st, *stnext, temp;
-	
-	int sortOk;
-	do
-	{
-		sortOk=1;
-		st=head;
-		stnext=head->next;
-		while(stnext)
-		{
-			if(strcmp(st->Name,stnext->Name)>0)
-				{
-
-					strcpy (temp.Name,st->Name);
-					strcpy (temp.Nazv,st->Nazv);
-					temp.kol=st->kol;
-					temp.cena=st->cena;
-
-					strcpy (st->Name,stnext->Name);
-					strcpy (st->Nazv,stnext->Nazv);
-					st->kol=stnext->kol;
-					st->cena=stnext->cena;
-
-					strcpy (stnext->Name,temp.Name);
-					strcpy (stnext->Nazv,temp.Nazv);
-					stnext->kol=temp.kol;
-					stnext->cena=temp.cena;
-
-						sortOk=0;
-				}
-			st=st->next;
-			stnext=stnext->next;
-		}
-	
-	}while(sortOk==0);
-}
 

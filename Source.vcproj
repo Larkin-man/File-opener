@@ -3,8 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8,00"
 	Name="Source"
-	ProjectGUID="{31334473-B830-4EDE-A813-8A261F5647E9}"
-	RootNamespace="My12"
+	ProjectGUID="{3360D80E-A032-4BC9-9CF6-BBCD5616EA7D}"
+	RootNamespace="Source"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -175,7 +175,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\12.cpp"
+				RelativePath=".\Source.cpp"
 				>
 			</File>
 			<File

@@ -26,30 +26,8 @@ void __fastcall TForm3::BitBtn2Click(TObject *Sender)
 Close();        
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm3::Edit1Change(TObject *Sender)
-{
-SpeedButton1->Enabled=Edit1->Text.operator!=("")&&
-                      Edit2->Text.operator!=("")&&
-                      Edit3->Text.operator!=("");
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TForm3::SpeedButton2Click(TObject *Sender)
-{
-Close();        
-}
-//---------------------------------------------------------------------------
-
 void __fastcall TForm3::FormShow(TObject *Sender)
 {
-Edit1->SetFocus();        
+BitBtn2->SetFocus();
 }
 //---------------------------------------------------------------------------
-
-void __fastcall TForm3::SpeedButton1Click(TObject *Sender)
-{
-Form1->CheckBox1->Checked=true;
-Close();
-}
-//---------------------------------------------------------------------------
-

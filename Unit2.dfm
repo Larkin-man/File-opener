@@ -1,10 +1,10 @@
 object Form2: TForm2
-  Left = 417
-  Top = 229
+  Left = 246
+  Top = 353
   BorderStyle = bsDialog
   Caption = #1044#1086#1073#1072#1074#1083#1077#1085#1080#1077' '#1079#1072#1087#1080#1089#1080
-  ClientHeight = 65
-  ClientWidth = 289
+  ClientHeight = 113
+  ClientWidth = 298
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,15 +16,39 @@ object Form2: TForm2
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 11
-    Top = 16
-    Width = 30
+    Left = 59
+    Top = 8
+    Width = 38
     Height = 13
     Alignment = taRightJustify
-    Caption = #1043#1086#1088#1086#1076
+    Caption = #1055#1086#1088#1086#1076#1072
+  end
+  object Label2: TLabel
+    Left = 13
+    Top = 32
+    Width = 84
+    Height = 13
+    Alignment = taRightJustify
+    Caption = #1055#1088#1086#1076#1086#1083#1078'. '#1078#1080#1079#1085#1080
+  end
+  object Label3: TLabel
+    Left = 6
+    Top = 56
+    Width = 91
+    Height = 13
+    Alignment = taRightJustify
+    Caption = #1052#1080#1085'. '#1088#1086#1089#1090' '#1074' '#1093#1086#1083#1082#1077
+  end
+  object Label4: TLabel
+    Left = 0
+    Top = 80
+    Width = 97
+    Height = 13
+    Alignment = taRightJustify
+    Caption = #1052#1072#1082#1089'. '#1088#1086#1089#1090' '#1074' '#1093#1086#1083#1082#1077
   end
   object SpeedButton1: TSpeedButton
-    Left = 176
+    Left = 240
     Top = 8
     Width = 49
     Height = 49
@@ -228,8 +252,8 @@ object Form2: TForm2
     OnClick = SpeedButton1Click
   end
   object SpeedButton2: TSpeedButton
-    Left = 232
-    Top = 8
+    Left = 240
+    Top = 56
     Width = 49
     Height = 49
     Flat = True
@@ -335,11 +359,35 @@ object Form2: TForm2
     OnClick = SpeedButton2Click
   end
   object Edit1: TEdit
-    Left = 48
-    Top = 16
+    Left = 104
+    Top = 8
     Width = 121
     Height = 21
     TabOrder = 0
+    OnChange = Edit1Change
+  end
+  object Edit2: TEdit
+    Left = 104
+    Top = 32
+    Width = 121
+    Height = 21
+    TabOrder = 1
+    OnChange = Edit1Change
+  end
+  object Edit3: TEdit
+    Left = 104
+    Top = 56
+    Width = 121
+    Height = 21
+    TabOrder = 2
+    OnChange = Edit1Change
+  end
+  object Edit4: TEdit
+    Left = 104
+    Top = 80
+    Width = 121
+    Height = 21
+    TabOrder = 3
     OnChange = Edit1Change
   end
 end

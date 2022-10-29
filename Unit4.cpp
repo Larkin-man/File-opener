@@ -4,7 +4,6 @@
 #pragma hdrstop
 
 #include "Unit4.h"
-#include "Unit1.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -16,12 +15,19 @@ __fastcall TForm4::TForm4(TComponent* Owner)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm4::FormCreate(TObject *Sender)
+void __fastcall TForm4::SpeedButton1Click(TObject *Sender)
 {
-const AnsiString Names[3]={"Время вылета","Время прилёта","Тип самолёта"};
-int i;
-for(i=0;i<3;i++) // цикл для подписи заголовков столбцов таблицы
- StringGrid1->Cells[i][0]=Names[i];
+if (SaveDialog1->Execute())
+ RichEdit1->Lines->SaveToFile(SaveDialog1->FileName);
 }
 //---------------------------------------------------------------------------
-
+void __fastcall TForm4::FormCreate(TObject *Sender)
+{
+SaveDialog1->InitialDir=GetCurrentDir();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm4::SpeedButton2Click(TObject *Sender)
+{
+Close();        
+}
+//---------------------------------------------------------------------------

@@ -10,13 +10,17 @@
 #include <Buttons.hpp>
 #include <ComCtrls.hpp>
 #include <Dialogs.hpp>
-#include <Grids.hpp>
 //---------------------------------------------------------------------------
 class TForm4 : public TForm
 {
 __published:	// IDE-managed Components
-        TStringGrid *StringGrid1;
+        TRichEdit *RichEdit1;
+        TSpeedButton *SpeedButton1;
+        TSpeedButton *SpeedButton2;
+        TSaveDialog *SaveDialog1;
+        void __fastcall SpeedButton1Click(TObject *Sender);
         void __fastcall FormCreate(TObject *Sender);
+        void __fastcall SpeedButton2Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TForm4(TComponent* Owner);

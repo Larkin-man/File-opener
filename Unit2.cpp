@@ -30,7 +30,10 @@ Close();
 //---------------------------------------------------------------------------
 void __fastcall TForm2::Edit1Change(TObject *Sender)
 {
-SpeedButton1->Enabled=Edit1->Text.operator!=("");
+SpeedButton1->Enabled=Edit1->Text.operator !=("")&&
+                      Edit2->Text.operator !=("")&&
+                      Edit3->Text.operator !=("")&&
+                      Edit4->Text.operator !=("");
 }
 //---------------------------------------------------------------------------
 
@@ -39,4 +42,7 @@ void __fastcall TForm2::FormShow(TObject *Sender)
 Edit1->SetFocus();
 }
 //---------------------------------------------------------------------------
+
+
+
 

@@ -14,6 +14,12 @@ class TForm2 : public TForm
 __published:	// IDE-managed Components
         TLabel *Label1;
         TEdit *Edit1;
+        TLabel *Label2;
+        TEdit *Edit2;
+        TLabel *Label3;
+        TEdit *Edit3;
+        TLabel *Label4;
+        TEdit *Edit4;
         TSpeedButton *SpeedButton1;
         TSpeedButton *SpeedButton2;
         void __fastcall SpeedButton1Click(TObject *Sender);

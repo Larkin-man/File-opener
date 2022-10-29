@@ -10,8 +10,8 @@
 
 struct Node     //Двусвязный список
 {
-   char name[80];
-   char  symb;
+	wchar_t name[80];  //wchar_t
+	wchar_t  symb;
    int  num2;
    double  num3;
    Node *pNext;
@@ -21,7 +21,7 @@ struct Node     //Двусвязный список
 Node *Record;       //Новый список
 int nRecord;     //Количество списков
 
-Node *CreateItem (int id, const char *name, float mark);
+//Node *CreateItem (int id, const wchar_t *name, float mark);
 Node *InsertAfter (Node *parent, Node *Item);
 Node *getTail (Node *head);
 Node *PushBack (Node *head, Node *Item);
@@ -47,7 +47,7 @@ bool ModifyBinary();
 int _tmain(int argc, _TCHAR* argv[])
 {
 int nMenu = 0;
-   printf ( "1.string 2.char 3.int 4.double.\n");
+   printf ( "1.string 2.wchar_t 3.int 4.double.\n");
 
 	while ((nMenu = showMenu()) != 0)
 	{
@@ -67,33 +67,23 @@ int nMenu = 0;
 			break;
 		case 5:
 			if (saveAsBinary())
-			{
 				printf ( "File saved.");
-			}
 			break;
 		case 7:
 			if (saveAsText())
-			{
 				printf ( "File saved.");
-			}
 			break;
 		case 6:
 			if (loadFromBinary())
-			{
 				printf ( "File loaded. %d",nRecord);
-			}
 			break;
 		case 8:
 			if (loadFromText())
-			{
 				printf ( "File loaded. %d",nRecord);
-			}
 			break;
 		case 9:
 			if (ModifyBinary())
-			{
 				printf ( "Report saved.");
-			}
 			break;
 		case -5:
 			if (ModifyBinary())
@@ -111,16 +101,16 @@ int nMenu = 0;
 
 	//getch(); //return 0;
 }
-//---------------------------------------------------------------------------
 //-------------------------------------------------------------------
-Node *CreateItem (const char *name, char  symb, int  num2 ,double  num3)
+//-------------------------------------------------------------------
+Node *CreateItem (const wchar_t *name, wchar_t  symb, int  num2 ,double  num3)
 {                //Функция создает новый элемент
-   Node *pItem = new Node;
-   strncpy(pItem->name, name, 80);
-   pItem->symb = symb;
-   pItem->num2 = num2;
-   pItem->num3 = num3;
-   pItem->pNext = NULL;
+	Node *pItem = new Node;
+	wcsncpy(pItem->name, name, 80);   //   wcscpy strncpy
+	pItem->symb = symb;
+	pItem->num2 = num2;
+	pItem->num3 = num3;
+	pItem->pNext = NULL;
    pItem->pPrev = NULL;
    return pItem;
 }
@@ -227,9 +217,9 @@ int showMenu()    //Функция показывает меню
 void addItem()     //Функция добавляет элемент в список
 {
    printf ( "Please type a new value: ");
-   char name[80];
-   int symb;
-   int num2;
+	wchar_t name[80];
+	wchar_t symb;
+	int num2;
    double num3;
    nRecord++;
    scanf("%s %c %d %le",&name,&symb,&num2,&num3);
@@ -242,14 +232,12 @@ void deleteItem()    //Функция удаляет выбраный элемент
 {
    Node *Item = Record;
    int nIdx = getIndex();
-   for (int i=0;i<nIdx;i++)
-      {
-         Item=Item->pNext;
-      }
+	for (int i=0; i<nIdx; i++)
+		Item=Item->pNext;
 
    if (Item->pNext == NULL)
        Item->pPrev->pNext=NULL;
-   else
+	else
    if (Item->pPrev == NULL)
        {
          Record=Record->pNext;
@@ -258,7 +246,6 @@ void deleteItem()    //Функция удаляет выбраный элемент
    else
       InsertAfter(Item->pPrev,Item->pNext);
    nRecord--;
-
 }
 //-------------------------------------------------------------------
 int getIndex()    //Функция возвращает индекс элемента
@@ -324,10 +311,10 @@ To specify that a given file is being opened or created in text mode append a t 
 	fwrite(&nRecord, sizeof(int), 1, fp);
    for (int i = 0; i < nRecord; ++i)
 	{
-      int len = strlen(Record->name);
+      int len = wcslen(Record->name);    // strlen
       fwrite(&len, sizeof(int), 1, fp);
       fwrite(Record->name, 1, len, fp);
-      fwrite(&Record->symb, sizeof(char), 1, fp);
+		fwrite(&Record->symb, sizeof(wchar_t), 1, fp);
       fwrite(&Record->num2, sizeof(int), 1, fp);
       fwrite(&Record->num3, sizeof(double), 1, fp);
       //fwrite(&Record->pNext, sizeof(*Node), 1, fp);  Указатели сохранять не нужно
@@ -358,15 +345,15 @@ bool loadFromBinary()    //Функция загружает список из бинарного файла
 	fread(&nRecord, sizeof(int), 1, fp);
 	for (int i = 0; i < nRecord; ++i)
 	{
-      char name[80];
-      char symb;
+		wchar_t name[80];
+		wchar_t symb;
       int num2;
       double num3;
       int len = 0;
       fread(&len, sizeof(int), 1, fp);
-      fread(name, sizeof(char), len, fp);
-      name[len]='\0';
-      fread(&symb, sizeof(char), 1, fp);
+		fread(name, sizeof(wchar_t), len, fp);
+		name[len]=L'\0';
+		fread(&symb, sizeof(wchar_t), 1, fp);
       fread(&num2, sizeof(int), 1, fp);
       fread(&num3, sizeof(double), 1, fp);
       //fread(&Record,sizeof(Record), 1, fp);
@@ -391,7 +378,7 @@ bool saveAsText()   //Функция сохраняет список в текстовый файл
 	fprintf(fp, "%d\n", nRecord);
 	for (int i = 0; i < nRecord; ++i)
 	{
-       fprintf(fp, "%s ", Record->name); //А С ПРОБЕЛАМИ ТО КАСЯК
+       fprintf(fp, "%s ", Record->name);
        fprintf(fp, "%c ", Record->symb);
        fprintf(fp, "%d ", Record->num2);
        fprintf(fp, "%lf\n", Record->num3);
@@ -419,8 +406,8 @@ bool loadFromText()     //Функция загружает список из текстового файла
 	fscanf(fp, "%d\n", &nRecord);
 	for (int i = 0; i < nRecord; ++i)
 	{
-      char name[80];
-      char symb;
+		wchar_t name[80];
+      wchar_t symb;
       int num2;
       double num3;
       fscanf(fp, "%s ", &name);
@@ -446,17 +433,17 @@ bool saveReport()   //Функция сохраняет отсчет
 		return false;
 	}
 	fprintf(fp, "This is a report example for %d items\n", nRecord);
-	fprintf(fp,"+----+--------------+--------------------------+---------------------------+-----------------------------------+\n");
-	fprintf(fp,"| №  | Наименование | Минимальный рост в холке | Максимальный рост в холке |  Средняя продолжительность жизни  |\n");
-	fprintf(fp,"+----+--------------+--------------------------+---------------------------+-----------------------------------+\n");
+	fprintf(fp,"+----+--------------+--------+---------------------------+-----------------------------------+\n");
+	fprintf(fp,"| №  | Наименование | Милота | Максимальный рост в холке |  Средняя продолжительность жизни  |\n");
+	fprintf(fp,"+----+--------------+--------+---------------------------+-----------------------------------+\n");
 	for(int i=0; i<nRecord; ++i)
 	{
-		fprintf(fp,"| %d | %s | %c | %d | %f |\n",
+		fprintf(fp,"| %d  | %s  | %c  | %d  | %f  |\n",
 		//fprintf(fp,"| %-2d | %-20s | %-c | %-20d | %-20f |\n",  ТАК НЕ ПАШЕТ
-         i+1, Record->name, Record->symb, Record->num2, Record->num3);
-      Record=Record->pNext; //ЗАПИСЫВАЕТ КАЛЯКУМАЛЯКУ
+			i+1, Record->name, Record->symb, Record->num2, Record->num3);
+		Record=Record->pNext; //ЗАПИСЫВАЕТ КАЛЯКУМАЛЯКУ
 	}
-	fprintf(fp,"+----+--------------+--------------------------+---------------------------+-----------------------------------+\n");
+	fprintf(fp,"+----+--------------+--------+---------------------------+-----------------------------------+\n");
 	fclose(fp);
    return true;
 
@@ -473,12 +460,12 @@ bool ModifyBinary()
 		Record = NULL;
 	}
 	int mas[8];
-	int WR = 55;
+	//int WR = 55;
 	//long rew = ;
 	fread(&mas[0], sizeof(int), 1, fp);
 	fread(&mas[1], sizeof(int), 1, fp);
 	fread(&mas[2], sizeof(int), 1, fp);
-	fseek(fp, -(sizeof(int)), SEEK_CUR);
+	fseek(fp, -(4), SEEK_CUR);
 	//fflush(fp);
 	int flush = mas[2]*2;
 	fwrite(&flush, sizeof(int), 1, fp);
